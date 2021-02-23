@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain, Menu, nativeImage, screen, Tray} from 'electron';
+import {app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, screen, Tray} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as fs from 'fs';
@@ -35,13 +35,19 @@ class Main {
       require('electron-reload')(__dirname, {
         electron: require(`${__dirname}/node_modules/electron`)
       });
-      win.loadURL('http://localhost:4200');
+      win.loadURL('http://localhost:4200').catch(err => {
+        dialog.showErrorBox('加载失败！', err);
+        return err;
+      });
     } else {
       win.loadURL(url.format({
         pathname: path.join(__dirname, 'dist/index.html'),
         protocol: 'file:',
         slashes: true
-      }));
+      })).catch(err => {
+        dialog.showErrorBox('加载失败！', err);
+        return err;
+      });
     }
 
     win.on('close', (e) => {

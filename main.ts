@@ -155,6 +155,7 @@ class Main {
     tray.setToolTip('云舒音乐');
     tray.setContextMenu(contextMenu);
     tray.on('double-click', () => this.win.show());
+    tray.on('click', () => this.win.webContents.send('play_event', 'play'));
     ipcMain.on('tray', (event, arg) => tray.setToolTip(arg));
   }
 }

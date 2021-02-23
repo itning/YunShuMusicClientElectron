@@ -129,6 +129,10 @@ class Main {
     const tray = new Tray(nativeImage.createFromPath(path.join(__dirname, 'file', 'left-arrow.png')));
     const contextMenu = Menu.buildFromTemplate([
       {
+        label: '主界面',
+        click: () => this.win.show()
+      },
+      {
         icon: nativeImage.createFromPath(path.join(__dirname, 'file', 'left-arrow.png')),
         label: '上一曲',
         click: () => this.win.webContents.send('play_event', 'last')
@@ -142,10 +146,6 @@ class Main {
         icon: nativeImage.createFromPath(path.join(__dirname, 'file', 'right-arrow.png')),
         label: '下一曲',
         click: () => this.win.webContents.send('play_event', 'next')
-      },
-      {
-        label: '主界面',
-        click: () => this.win.show()
       },
       {
         label: '退出',

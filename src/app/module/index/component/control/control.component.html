@@ -1,0 +1,27 @@
+<div class="control-box mat-app-background">
+  <div class="control-left">
+    <button mat-icon-button color="primary" (click)="onPlayChange(3)">
+      <mat-icon>skip_previous</mat-icon>
+    </button>
+    <button mat-icon-button color="primary" (click)="onPlayChange()">
+      <mat-icon>{{nowPlaying ? 'pause' : 'play_arrow'}}</mat-icon>
+    </button>
+    <button mat-icon-button color="primary" (click)="onPlayChange(2)">
+      <mat-icon>skip_next</mat-icon>
+    </button>
+  </div>
+  <div class="control-time">
+    <span style="padding-left: 7px">{{nowTime | secondsToMinutes}}/{{totalTime | secondsToMinutes}}</span>
+    <button [matTooltip]="getNowPlayModeDesc()"
+            matTooltipPosition="above"
+            mat-icon-button color="primary" (click)="changePlayMode()">
+      <mat-icon>{{nowPlayMode}}</mat-icon>
+    </button>
+  </div>
+  <div #musicControlInfo class="control-music-info" (mouseover)="stopInterval()"
+       (mouseout)="startInterval()">{{info}}</div>
+  <div class="control-slider">
+    <mat-slider [step]="sliderStep" [min]="0" [max]="totalTime" [value]="nowTime"
+                (input)="onTimeChange($event)"></mat-slider>
+  </div>
+</div>

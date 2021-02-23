@@ -1,0 +1,56 @@
+<ng-container>
+  <mat-toolbar color="primary" class="index-header" style="height: 60px">
+    <button mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <form class="search-form">
+      <mat-form-field class="search-full-width">
+        <!--suppress HtmlFormInputWithoutLabel -->
+        <input matInput autocomplete="off" name="search" type="search" [(ngModel)]="searchKeyword"
+               (keyup.enter)="onSearch()">
+      </mat-form-field>
+    </form>
+    <button mat-icon-button (click)="onSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-sidenav-container class="index-container">
+    <mat-sidenav #sidenav mode="over" class="index-sidenav" fixedInViewport="true">
+      <app-sidenav [onTimeChangeEvent]="onTimeChangeEventSubject"
+                   [volumeValue]="volumeValue"
+                   (volumeChange)="onVolumeChange($event)"
+                   [lyric]="lyricString"></app-sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mat-progress-bar [mode]="progressMode" *ngIf="progressMode" style="position: fixed"></mat-progress-bar>
+      <mat-selection-list [multiple]="false"
+                          (selectionChange)="doOnClick($event.option.value)">
+        <mat-list-option *ngFor="let item of list;let i=index" [value]="item"
+                         [selected]="item.musicId===nowPlayingMusicId">
+          <div matListAvatar class="music-list-item-index">{{i + 1}}</div>
+          <h3 matLine>{{item.name}}</h3>
+          <div matLine>{{item.singer}}</div>
+        </mat-list-option>
+      </mat-selection-list>
+      <mat-paginator [length]="originalResponse.totalElements"
+                     [pageSize]="originalResponse.size"
+                     [pageIndex]="originalResponse.number"
+                     [pageSizeOptions]="[100, 500, 1000, 2000]"
+                     (page)="onPageChange($event)">
+      </mat-paginator>
+      <button mat-mini-fab color="accent" class="fab-btn-location" (click)="onLocationClick()">
+        <mat-icon>gps_fixed</mat-icon>
+      </button>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <div class="index-footer">
+    <app-control [nowPlaying]="isPlay"
+                 [nowTime]="musicTimeChangeEvent.nowTime"
+                 [totalTime]="musicTimeChangeEvent.totalTime"
+                 [info]="nowPlayMusicInfo"
+                 [nowPlayMode]="playMode"
+                 (timeChange)="onTimeChange($event)"
+                 (playStatusChange)="onPlayStatusChange($event)"
+                 (playModeChange)="onPlayModeChange($event)"></app-control>
+  </div>
+</ng-container>

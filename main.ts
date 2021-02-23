@@ -65,7 +65,7 @@ class Main {
     win.setThumbarButtons([
       {
         tooltip: '上一曲',
-        icon: nativeImage.createFromPath(path.join(__dirname, 'file', 'left-arrow.png')),
+        icon: nativeImage.createFromPath(path.join(__dirname, 'file', 'previous.png')),
         click() {
           win.webContents.send('play_event', 'last');
         }
@@ -79,7 +79,7 @@ class Main {
       },
       {
         tooltip: '下一曲',
-        icon: nativeImage.createFromPath(path.join(__dirname, 'file', 'right-arrow.png')),
+        icon: nativeImage.createFromPath(path.join(__dirname, 'file', 'next.png')),
         click() {
           win.webContents.send('play_event', 'next');
         }
@@ -126,14 +126,14 @@ class Main {
   }
 
   private initTray() {
-    const tray = new Tray(nativeImage.createFromPath(path.join(__dirname, 'file', 'left-arrow.png')));
+    const tray = new Tray(nativeImage.createFromPath(path.join(__dirname, 'file', 'play.png')));
     const contextMenu = Menu.buildFromTemplate([
       {
         label: '主界面',
         click: () => this.win.show()
       },
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'file', 'left-arrow.png')),
+        icon: nativeImage.createFromPath(path.join(__dirname, 'file', 'previous.png')),
         label: '上一曲',
         click: () => this.win.webContents.send('play_event', 'last')
       },
@@ -143,7 +143,7 @@ class Main {
         click: () => this.win.webContents.send('play_event', 'play')
       },
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'file', 'right-arrow.png')),
+        icon: nativeImage.createFromPath(path.join(__dirname, 'file', 'next.png')),
         label: '下一曲',
         click: () => this.win.webContents.send('play_event', 'next')
       },

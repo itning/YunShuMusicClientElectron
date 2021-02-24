@@ -58,7 +58,8 @@ export class ElectronService {
     page.empty = musics ? musics.length > 0 : false;
     page.first = page.last = true;
     page.numberOfElements = page.size = page.totalElements = musics ? musics.length : 0;
-    page.number = page.totalPages = 1;
+    page.totalPages = 1;
+    page.number = 0;
     return page;
   }
 
@@ -99,7 +100,7 @@ export class ElectronService {
         } else {
           this.remote.dialog.showErrorBox('文件读取失败', err.toString());
         }
-        return Promise.race('');
+        return '';
       });
   }
 

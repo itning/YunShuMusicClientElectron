@@ -24,7 +24,7 @@
     <mat-sidenav-content>
       <mat-progress-bar [mode]="progressMode" *ngIf="progressMode" style="position: fixed"></mat-progress-bar>
       <mat-selection-list [multiple]="false"
-                          (selectionChange)="doOnClick($event.option.value)">
+                          (selectionChange)="doOnClick($event.options[0].value)">
         <mat-list-option *ngFor="let item of list;let i=index" [value]="item"
                          [selected]="item.musicId===nowPlayingMusicId">
           <div matListAvatar class="music-list-item-index">{{i + 1}}</div>

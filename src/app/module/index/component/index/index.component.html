@@ -15,11 +15,11 @@
     </button>
   </mat-toolbar>
   <mat-sidenav-container class="index-container">
-    <mat-sidenav #sidenav mode="over" class="index-sidenav" fixedInViewport="true">
+    <mat-sidenav #sidenav mode="side" class="index-sidenav" opened>
       <app-sidenav [onTimeChangeEvent]="onTimeChangeEventSubject"
                    [volumeValue]="volumeValue"
                    (volumeChange)="onVolumeChange($event)"
-                   [lyric]="lyricString"></app-sidenav>
+                   [imageSrc]="imageUrl"></app-sidenav>
     </mat-sidenav>
     <mat-sidenav-content>
       <mat-progress-bar [mode]="progressMode" *ngIf="progressMode" style="position: fixed"></mat-progress-bar>

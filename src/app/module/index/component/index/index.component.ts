@@ -3,7 +3,11 @@ import {Page} from '../../../../entity/page/Page';
 import {Music} from '../../../../entity/Music';
 import {PageEvent} from '@angular/material/paginator';
 import {HttpClient} from '@angular/common/http';
-import {MusicLoadEvent, MusicPlaybackDurationChangeEvent, MusicPlayService} from '../../../../service/music-play.service';
+import {
+  MusicLoadEvent,
+  MusicPlaybackDurationChangeEvent,
+  MusicPlayService
+} from '../../../../service/music-play.service';
 import {FileService} from '../../../../service/file.service';
 import {MusicListService, PlayMode} from '../../../../service/music-list.service';
 import {PlayEvent} from '../control/control.component';
@@ -35,7 +39,7 @@ export class IndexComponent implements OnInit {
   onTimeChangeEventSubject = new Subject<MusicPlaybackDurationChangeEvent>();
   volumeValue = 1;
   progressMode: ProgressBarMode;
-  lyricString = '';
+  imageUrl: string;
 
   constructor(private http: HttpClient,
               private snackBar: MatSnackBar,
@@ -80,7 +84,10 @@ export class IndexComponent implements OnInit {
       // 单曲循环
       if (this.playMode === PlayMode.REPEAT) {
         this.fileService.getMusicFileToObjectUrl(this.nowPlayingMusicId)
-          .pipe(mergeMap(url => this.musicPlayService.start(url)))
+          .pipe(mergeMap(music => {
+            this.imageUrl = music.picUrl;
+            return this.musicPlayService.start(music.musicUrl);
+          }))
           .subscribe((status) => {
               if (!status) {
                 this.snackBar.open('播放失败', '我知道了');
@@ -119,7 +126,6 @@ export class IndexComponent implements OnInit {
 
     this.lyricsService.onLyricChangeEvent.subscribe(lyric => {
       if (lyric) {
-        this.lyricString = lyric;
         this.nowPlayMusicInfo = lyric;
       }
     });
@@ -183,7 +189,10 @@ export class IndexComponent implements OnInit {
     if (this.nowPlayingMusicId !== music.musicId) {
       this.lyricsService.load(music.lyricId);
       this.fileService.getMusicFileToObjectUrl(music.musicId)
-        .pipe(mergeMap(url => this.musicPlayService.start(url)))
+        .pipe(mergeMap(music => {
+          this.imageUrl = music.picUrl;
+          return this.musicPlayService.start(music.musicUrl);
+        }))
         .subscribe((status) => {
           if (status) {
             this.refreshMusicInfo(music.musicId);
@@ -244,7 +253,10 @@ export class IndexComponent implements OnInit {
         const nextMusic = this.musicListService.getNextMusic(this.playMode, this.nowPlayingMusicId, this.originalResponse);
         this.lyricsService.load(nextMusic.lyricId);
         this.fileService.getMusicFileToObjectUrl(nextMusic.musicId)
-          .pipe(mergeMap(url => this.musicPlayService.start(url)))
+          .pipe(mergeMap(music => {
+            this.imageUrl = music.picUrl;
+            return this.musicPlayService.start(music.musicUrl);
+          }))
           .subscribe((status) => {
             if (status) {
               this.refreshMusicInfo(nextMusic.musicId);
@@ -257,7 +269,10 @@ export class IndexComponent implements OnInit {
         const previousMusic = this.musicListService.getPreviousMusic(this.playMode, this.nowPlayingMusicId, this.originalResponse);
         this.lyricsService.load(previousMusic.lyricId);
         this.fileService.getMusicFileToObjectUrl(previousMusic.musicId)
-          .pipe(mergeMap(url => this.musicPlayService.start(url)))
+          .pipe(mergeMap(music => {
+            this.imageUrl = music.picUrl;
+            return this.musicPlayService.start(music.musicUrl);
+          }))
           .subscribe((status) => {
             if (status) {
               this.refreshMusicInfo(previousMusic.musicId);

@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {Subject} from 'rxjs';
 import {MusicPlaybackDurationChangeEvent} from '../../../../service/music-play.service';
 import {MatSliderChange} from '@angular/material/slider';
@@ -17,7 +26,7 @@ export class SidenavComponent implements OnInit {
   @Input()
   volumeValue = 100;
   @Input()
-  lyric: string;
+  imageSrc: string;
   @Output()
   volumeChange = new EventEmitter<number>();
 

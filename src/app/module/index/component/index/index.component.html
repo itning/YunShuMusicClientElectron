@@ -19,7 +19,7 @@
       <app-sidenav [onTimeChangeEvent]="onTimeChangeEventSubject"
                    [volumeValue]="volumeValue"
                    (volumeChange)="onVolumeChange($event)"
-                   [imageSrc]="imageUrl"></app-sidenav>
+                   [music]="music"></app-sidenav>
     </mat-sidenav>
     <mat-sidenav-content>
       <mat-progress-bar [mode]="progressMode" *ngIf="progressMode" style="position: fixed"></mat-progress-bar>

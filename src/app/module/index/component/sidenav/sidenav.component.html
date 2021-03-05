@@ -1,3 +1,6 @@
 <canvas #musicCanvas width="195" height="50"></canvas>
 <mat-slider min="0" max="1" step="0.1" [value]="volumeValue" (input)="onVolumeChange($event)"></mat-slider>
-<img [src]="imageSrc" alt="" style="width: 100%">
+<img [src]="music?.picUrl" alt="" style="width: 100%">
+<p>标题：{{music?.title}}</p>
+<p>艺术家：{{music?.artists}}</p>
+<p>专辑：{{music?.album}}</p>

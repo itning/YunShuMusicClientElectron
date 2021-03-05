@@ -8,6 +8,8 @@ import * as fs from 'fs';
 import * as mysql from 'mysql2';
 import {Music} from '../entity/Music';
 import {Page} from '../entity/page/Page';
+import * as musicMetadata from 'music-metadata-browser';
+import {IAudioMetadata} from "music-metadata/lib/type";
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +22,7 @@ export class ElectronService {
   fs: typeof fs;
   private mysql: typeof mysql;
   private readonly pool: mysql.Pool;
+  private musicMetadata: typeof musicMetadata;
   playStatusChange: EventEmitter<string> = new EventEmitter<string>();
 
   get isElectron(): boolean {
@@ -49,6 +52,7 @@ export class ElectronService {
         queueLimit: 0
       });
       this.ipcRenderer.on('play_event', (event, type) => this.playStatusChange.emit(type));
+      this.musicMetadata = window.require('music-metadata-browser');
     }
   }
 
@@ -83,9 +87,10 @@ export class ElectronService {
       });
   }
 
-  getMusicFile(musicId: string): Promise<Blob> {
+  getMusicFile(musicId: string): Promise<MusicInfo> {
     return this.fs.promises.readFile(`F:/music_yunshu/${musicId}`)
       .then(data => new Blob([data.buffer]))
+      .then(data => this.musicMetadata.parseBlob(data).then(rest => new MusicInfo(data, rest)))
       .catch(err => {
         this.remote.dialog.showErrorBox('文件读取失败', err.toString());
         return err;
@@ -116,4 +121,37 @@ export class ElectronService {
 
 export enum EventType {
   TRAY_TOOL_TIP
+}
+
+export class MusicInfo {
+  blob: Blob;
+  /**
+   * 专辑
+   */
+  album: string;
+  /**
+   * 标题
+   */
+  title: string;
+  /**
+   * 艺术家
+   */
+  artists: string[];
+
+  pictureBase64: string;
+
+  constructor(blob: Blob, metadata: IAudioMetadata) {
+    this.blob = blob;
+    this.album = metadata.common.album;
+    this.title = metadata.common.title;
+    if (metadata.common.artists && metadata.common.artists.length > 0) {
+      this.artists = metadata.common.artists;
+    } else {
+      this.artists = [metadata.common.artist]
+    }
+    if (metadata.common.picture) {
+      const format = metadata.common.picture[0]?.format;
+      this.pictureBase64 = `data:${format ? format : 'image/jpeg'};base64,${metadata.common.picture[0]?.data.toString('base64')}`;
+    }
+  }
 }

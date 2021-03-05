@@ -1,11 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {mergeMap} from 'rxjs/operators';
-import {ElectronService} from './electron.service';
+import {map} from 'rxjs/operators';
+import {ElectronService, MusicInfo} from './electron.service';
 import {fromPromise} from 'rxjs/internal-compatibility';
-import * as musicMetadata from 'music-metadata-browser';
-import {IAudioMetadata} from "music-metadata/lib/type";
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +14,12 @@ export class FileService {
               private electronService: ElectronService) {
   }
 
-  getMusicFile(musicId: string): Observable<Blob> {
+  getMusicFile(musicId: string): Observable<MusicInfo> {
     return fromPromise(this.electronService.getMusicFile(musicId));
   }
 
   getMusicFileToObjectUrl(musicId: string): Observable<MusicWrapper> {
-    return this.getMusicFile(musicId).pipe(mergeMap(blob => fromPromise(musicMetadata.parseBlob(blob).then(it => new MusicWrapper(window.URL.createObjectURL(blob), it)))));
+    return this.getMusicFile(musicId).pipe(map(data => new MusicWrapper(data)));
   }
 
   getLyricFile(lyricId: string): Observable<string> {
@@ -32,12 +30,24 @@ export class FileService {
 export class MusicWrapper {
   musicUrl: string;
   picUrl: string;
+  /**
+   * 专辑
+   */
+  album: string;
+  /**
+   * 标题
+   */
+  title: string;
+  /**
+   * 艺术家
+   */
+  artists: string[];
 
-  constructor(musicUrl: string, metadata?: IAudioMetadata) {
-    this.musicUrl = musicUrl;
-    if (metadata && metadata.common.picture) {
-      const format = metadata.common.picture[0]?.format;
-      this.picUrl = `data:${format ? format : 'image/jpeg'};base64,${metadata.common.picture[0]?.data.toString('base64')}`;
-    }
+  constructor(music: MusicInfo) {
+    this.musicUrl = window.URL.createObjectURL(music.blob);
+    this.title = music.title;
+    this.album = music.album;
+    this.artists = music.artists;
+    this.picUrl = music.pictureBase64;
   }
 }

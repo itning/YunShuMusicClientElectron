@@ -11,6 +11,7 @@ import {
 import {Subject} from 'rxjs';
 import {MusicPlaybackDurationChangeEvent} from '../../../../service/music-play.service';
 import {MatSliderChange} from '@angular/material/slider';
+import {MusicWrapper} from "../../../../service/file.service";
 
 @Component({
   selector: 'app-sidenav',
@@ -26,7 +27,7 @@ export class SidenavComponent implements OnInit {
   @Input()
   volumeValue = 100;
   @Input()
-  imageSrc: string;
+  music: MusicWrapper;
   @Output()
   volumeChange = new EventEmitter<number>();
 

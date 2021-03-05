@@ -8,7 +8,7 @@ import {
   MusicPlaybackDurationChangeEvent,
   MusicPlayService
 } from '../../../../service/music-play.service';
-import {FileService} from '../../../../service/file.service';
+import {FileService, MusicWrapper} from '../../../../service/file.service';
 import {MusicListService, PlayMode} from '../../../../service/music-list.service';
 import {PlayEvent} from '../control/control.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -39,7 +39,7 @@ export class IndexComponent implements OnInit {
   onTimeChangeEventSubject = new Subject<MusicPlaybackDurationChangeEvent>();
   volumeValue = 1;
   progressMode: ProgressBarMode;
-  imageUrl: string;
+  music: MusicWrapper
 
   constructor(private http: HttpClient,
               private snackBar: MatSnackBar,
@@ -83,17 +83,7 @@ export class IndexComponent implements OnInit {
     this.musicPlayService.onPlayEndEvent.subscribe(() => {
       // 单曲循环
       if (this.playMode === PlayMode.REPEAT) {
-        this.fileService.getMusicFileToObjectUrl(this.nowPlayingMusicId)
-          .pipe(mergeMap(music => {
-            this.imageUrl = music.picUrl;
-            return this.musicPlayService.start(music.musicUrl);
-          }))
-          .subscribe((status) => {
-              if (!status) {
-                this.snackBar.open('播放失败', '我知道了');
-              }
-            }
-          );
+        this.playIt(this.nowPlayingMusicId);
       } else {
         this.onPlayStatusChange(PlayEvent.NEXT);
       }
@@ -157,6 +147,21 @@ export class IndexComponent implements OnInit {
     }
   }
 
+  private playIt(musicId: string) {
+    this.fileService.getMusicFileToObjectUrl(musicId)
+      .pipe(mergeMap(music => {
+        this.music = music;
+        return this.musicPlayService.start(music.musicUrl);
+      }))
+      .subscribe((status) => {
+        if (status) {
+          this.refreshMusicInfo(musicId);
+        } else {
+          this.snackBar.open('播放失败', '我知道了');
+        }
+      });
+  }
+
   @HostListener('window:keydown.space', ['$event'])
   onSpaceKeyDown(): void {
     if (!this.musicPlayService.isPlayingNow()) {
@@ -188,18 +193,7 @@ export class IndexComponent implements OnInit {
   doOnClick(music: Music): void {
     if (this.nowPlayingMusicId !== music.musicId) {
       this.lyricsService.load(music.lyricId);
-      this.fileService.getMusicFileToObjectUrl(music.musicId)
-        .pipe(mergeMap(music => {
-          this.imageUrl = music.picUrl;
-          return this.musicPlayService.start(music.musicUrl);
-        }))
-        .subscribe((status) => {
-          if (status) {
-            this.refreshMusicInfo(music.musicId);
-          } else {
-            this.snackBar.open('播放失败', '我知道了');
-          }
-        });
+      this.playIt(music.musicId);
     } else {
       if (this.musicPlayService.isPlayingNow()) {
         this.musicPlayService.pause().subscribe();
@@ -252,34 +246,12 @@ export class IndexComponent implements OnInit {
       case PlayEvent.NEXT:
         const nextMusic = this.musicListService.getNextMusic(this.playMode, this.nowPlayingMusicId, this.originalResponse);
         this.lyricsService.load(nextMusic.lyricId);
-        this.fileService.getMusicFileToObjectUrl(nextMusic.musicId)
-          .pipe(mergeMap(music => {
-            this.imageUrl = music.picUrl;
-            return this.musicPlayService.start(music.musicUrl);
-          }))
-          .subscribe((status) => {
-            if (status) {
-              this.refreshMusicInfo(nextMusic.musicId);
-            } else {
-              this.snackBar.open('播放失败', '我知道了');
-            }
-          });
+        this.playIt(nextMusic.musicId);
         break;
       case PlayEvent.PREVIOUS:
         const previousMusic = this.musicListService.getPreviousMusic(this.playMode, this.nowPlayingMusicId, this.originalResponse);
         this.lyricsService.load(previousMusic.lyricId);
-        this.fileService.getMusicFileToObjectUrl(previousMusic.musicId)
-          .pipe(mergeMap(music => {
-            this.imageUrl = music.picUrl;
-            return this.musicPlayService.start(music.musicUrl);
-          }))
-          .subscribe((status) => {
-            if (status) {
-              this.refreshMusicInfo(previousMusic.musicId);
-            } else {
-              this.snackBar.open('播放失败', '我知道了');
-            }
-          });
+        this.playIt(previousMusic.musicId);
         break;
       default:
     }

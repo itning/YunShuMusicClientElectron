@@ -5,6 +5,7 @@
   },
   "files": [
     "dist",
+    "file",
     "main.js"
   ],
   "win": {

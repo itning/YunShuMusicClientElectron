@@ -1,0 +1,52 @@
+# This workflow will build a Npm Web project with Node.JS and create release
+# author: https://github.com/itning
+
+name: Auto Build
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Npm Install And Build
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Build/release Electron app
+      uses: samuelmeuli/action-electron-builder@v1.6.0
+      with:
+          build_script_name: build:prod
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    - uses: actions/upload-artifact@v2
+      with:
+        name: win
+        path: release/*.exe
+        if-no-files-found: ignore
+    - uses: actions/upload-artifact@v2
+      with:
+        name: mac
+        path: release/*.dmg
+        if-no-files-found: ignore
+    - uses: actions/upload-artifact@v2
+      with:
+        name: linux
+        path: release/*.AppImage
+        if-no-files-found: ignore

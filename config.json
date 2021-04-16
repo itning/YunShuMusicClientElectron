@@ -1,0 +1,14 @@
+{
+  "lyricPath": "E:/lyric_yunshu",
+  "musicPath": "E:/music_yunshu",
+  "poolOptions": {
+    "host": "localhost",
+    "user": "root",
+    "password": "root",
+    "database": "yunshu_music",
+    "waitForConnections": true,
+    "enableKeepAlive": true,
+    "connectionLimit": 5,
+    "queueLimit": 0
+  }
+}

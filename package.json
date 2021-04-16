@@ -1,6 +1,6 @@
 {
   "name": "yun-shu-music-client",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "YunShu Music Cli By Angular 11 with Electron (Typescript + SASS + Hot Reload)",
   "homepage": "https://github.com/itning/YunShuMusicClientElectron",
   "author": {

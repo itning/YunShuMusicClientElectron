@@ -10,7 +10,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/itning/YunShuMusicClientElectron.svg)](https://github.com/itning/YunShuMusicClientElectron/commits)
 [![GitHub release](https://img.shields.io/github/release/itning/YunShuMusicClientElectron.svg)](https://github.com/itning/YunShuMusicClientElectron/releases)
 [![GitHub repo size in bytes](https://img.shields.io/github/repo-size/itning/YunShuMusicClientElectron.svg)](https://github.com/itning/YunShuMusicClientElectron)
-[![HitCount](http://hits.dwyl.io/itning/YunShuMusicClientElectron.svg)](http://hits.dwyl.io/itning/YunShuMusicClientElectron)
+[![HitCount](http://hits.dwyl.com/itning/YunShuMusicClientElectron.svg)](http://hits.dwyl.com/itning/YunShuMusicClientElectron)
 [![language](https://img.shields.io/badge/language-TypeScript-green.svg)](https://github.com/itning/YunShuMusicClientElectron)
 
 服务端：[https://github.com/itning/yunshu-nas](https://github.com/itning/yunshu-nas)

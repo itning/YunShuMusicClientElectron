@@ -1,6 +1,6 @@
 {
-  "lyricPath": "E:/lyric_yunshu",
-  "musicPath": "E:/music_yunshu",
+  "lyricPath": "E:\\lyric_yunshu",
+  "musicPath": "E:\\music_yunshu",
   "poolOptions": {
     "host": "localhost",
     "user": "root",

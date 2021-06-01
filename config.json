@@ -1,8 +1,8 @@
 {
-  "lyricPath": "E:\\lyric_yunshu",
-  "musicPath": "E:\\music_yunshu",
+  "lyricPath": "F:\\f\\lyric_yunshu",
+  "musicPath": "F:\\f\\music_yunshu",
   "poolOptions": {
-    "host": "localhost",
+    "host": "nas",
     "user": "root",
     "password": "root",
     "database": "yunshu_music",
@@ -10,5 +10,7 @@
     "enableKeepAlive": true,
     "connectionLimit": 5,
     "queueLimit": 0
-  }
+  },
+  "serverUrl": "http://nas:8888/",
+  "useServer": true
 }

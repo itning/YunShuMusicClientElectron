@@ -171,6 +171,8 @@ class Config {
   poolOptions: PoolOptions;
   musicPath: string;
   lyricPath: string;
+  serverUrl: string;
+  useServer = false;
 }
 
 export enum EventType {

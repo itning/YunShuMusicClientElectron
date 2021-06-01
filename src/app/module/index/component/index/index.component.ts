@@ -39,7 +39,7 @@ export class IndexComponent implements OnInit {
   onTimeChangeEventSubject = new Subject<MusicPlaybackDurationChangeEvent>();
   volumeValue = 1;
   progressMode: ProgressBarMode;
-  music: MusicWrapper
+  music: MusicWrapper;
 
   constructor(private http: HttpClient,
               private snackBar: MatSnackBar,
@@ -147,7 +147,7 @@ export class IndexComponent implements OnInit {
     }
   }
 
-  private playIt(musicId: string) {
+  private playIt(musicId: string): void {
     this.fileService.getMusicFileToObjectUrl(musicId)
       .pipe(mergeMap(music => {
         this.music = music;
